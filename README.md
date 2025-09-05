@@ -14,7 +14,8 @@ Aplicación desarrollada como proyecto académico, utilizando tecnologías moder
 ##  Video Demostrativo
 
 Aquí está el enlace del video demostrativo de la aplicación:  
-https://drive.google.com/file/d/1oJ70gbcLIenepIaq-FSA_SWWryPavaf8/view?usp=drive_link
+https://drive.google.com/file/d/1jjmkLXgh2c2OxEi8PFDDsIy0ojeek26f/view?usp=sharing
+
 ##  Dependencias Utilizadas
 
 Listado de paquetes y librerías empleadas en el desarrollo:
