@@ -39,10 +39,6 @@ Listado de paquetes y librerías empleadas en el desarrollo:
 | `react-native-safe-area-context` | ^5.6.1 |
 | `react-native-screens` | ^4.15.3 |
 
-> Si se agregan más dependencias, se recomienda incluirlas aquí con su versión correspondiente.
-
----
-
 ##  Descripción del Proyecto
 
 Esta aplicación móvil fue creada con el objetivo de ofrecer una plataforma funcional y moderna que incluye:
