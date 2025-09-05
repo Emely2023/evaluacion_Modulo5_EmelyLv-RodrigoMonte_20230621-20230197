@@ -1,6 +1,13 @@
-// screens/RegisterScreen.js
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Alert,
+  ScrollView,
+} from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
@@ -16,46 +23,140 @@ export default function RegisterScreen({ navigation }) {
   const handleRegister = async () => {
     if (!email || !password || !fullName || !gradYear || !degree) {
       setError("Todos los campos son obligatorios.");
+      Alert.alert("Error", "Todos los campos son obligatorios.");
       return;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
-      // Guardar en Firestore
       await setDoc(doc(database, "users", user.uid), {
-        email: email,
-        fullName: fullName,
+        email,
+        fullName,
         graduationYear: gradYear,
-        degree: degree,
+        degree,
         createdAt: new Date(),
       });
 
+      Alert.alert("Registrado Correctamente", "Se ha registrado con éxito.");
       navigation.navigate("Login");
     } catch (e) {
       console.log(e);
       setError(e.message);
+      Alert.alert("Error al registrar", e.message);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text>Registro</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Crear Cuenta</Text>
+
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TextInput placeholder="Nombre completo" value={fullName} onChangeText={setFullName} style={styles.input} />
-      <TextInput placeholder="Año de graduación" value={gradYear} onChangeText={setGradYear} style={styles.input} keyboardType="numeric" />
-      <TextInput placeholder="Título universitario" value={degree} onChangeText={setDegree} style={styles.input} />
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" />
-      <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button title="Registrar" onPress={handleRegister} />
-      <Text onPress={() => navigation.navigate("Login")}>¿Ya tienes cuenta? Inicia sesión</Text>
-    </View>
+
+      <TextInput
+        placeholder="Nombre completo"
+        value={fullName}
+        onChangeText={setFullName}
+        style={styles.input}
+        placeholderTextColor="#aaa"
+      />
+      <TextInput
+        placeholder="Año de graduación"
+        value={gradYear}
+        onChangeText={setGradYear}
+        style={styles.input}
+        keyboardType="numeric"
+        placeholderTextColor="#aaa"
+      />
+      <TextInput
+        placeholder="Título universitario"
+        value={degree}
+        onChangeText={setDegree}
+        style={styles.input}
+        placeholderTextColor="#aaa"
+      />
+      <TextInput
+        placeholder="Correo electrónico"
+        value={email}
+        onChangeText={setEmail}
+        style={styles.input}
+        keyboardType="email-address"
+        placeholderTextColor="#aaa"
+      />
+      <TextInput
+        placeholder="Contraseña"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={styles.input}
+        placeholderTextColor="#aaa"
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Registrarse</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
+        ¿Ya tienes cuenta? <Text style={styles.linkBold}>Inicia sesión</Text>
+      </Text>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20 },
-  input: { borderWidth: 1, marginBottom: 10, padding: 8, borderRadius: 4 },
-  error: { color: "red", marginBottom: 10 },
+  container: {
+    flexGrow: 1,
+    backgroundColor: "#f2f2f2",
+    justifyContent: "center",
+    paddingHorizontal: 30,
+    paddingVertical: 40,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 30,
+    textAlign: "center",
+    color: "#333",
+  },
+  input: {
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 15,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  button: {
+    backgroundColor: "#4A90E2",
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  link: {
+    marginTop: 20,
+    textAlign: "center",
+    color: "#666",
+    fontSize: 14,
+  },
+  linkBold: {
+    color: "#4A90E2",
+    fontWeight: "bold",
+  },
+  error: {
+    color: "#ff4d4d",
+    marginBottom: 10,
+    textAlign: "center",
+  },
 });

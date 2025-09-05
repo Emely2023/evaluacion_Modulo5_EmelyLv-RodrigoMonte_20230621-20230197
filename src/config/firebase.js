@@ -1,14 +1,15 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth";
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import {
   APIKEY,
   AUTHDOMAIN,
   PROJECTID,
   STORAGEBUCKET,
-  MESSAGINFSENDERID,
+  MESSAGINGSENDERID,
   APPID,
 } from "@env";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -20,7 +21,7 @@ const firebaseConfig = {
   authDomain: AUTHDOMAIN,
   projectId: PROJECTID,
   storageBucket: STORAGEBUCKET,
-  messagingSenderId: MESSAGINFSENDERID,
+  messagingSenderId: MESSAGINGSENDERID,
   appId: APPID,
 };
 
@@ -50,13 +51,13 @@ if (storage) {
   console.log("storage initialization failed");
 }
 
-const auth = getAuth(app);
-
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 if (auth) {
   console.log("auth initialized correctly");
 } else {
   console.log("auth initialization failed");
 }
-
 
 export { database, storage, auth };
